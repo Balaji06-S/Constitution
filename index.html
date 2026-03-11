@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Law - Know Your Rights</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Extra styles for transitions */
+        .loading-overlay {
+            position: fixed; inset: 0; background: rgba(255,255,255,0.9);
+            display: none; align-items: center; justify-content: center; z-index: 2000;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div id="loading-spinner" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="app">
+        <!-- Login Page -->
+        <div id="login-page" class="login-page">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-logo">
+                        <i data-lucide="globe" class="chakra-icon" style="width: 40px; height: 40px;"></i> Law
+                    </div>
+                    <h1 id="login-title">Citizen Portal</h1>
+                    <p id="login-subtitle">Secure access to Indian legal rights.</p>
+                </div>
+
+                <form id="login-form" class="login-form">
+                    <div id="phone-input-group" class="input-group">
+                        <label id="phone-label">Phone Number</label>
+                        <div class="input-with-icon">
+                            <i data-lucide="phone" style="width: 20px; height: 20px;"></i>
+                            <input type="tel" id="phone-number" placeholder="Enter 10-digit number" required maxlength="10">
+                        </div>
+                        <p class="otp-hint">A test OTP will be shown in a popup.</p>
+                    </div>
+
+                    <div id="otp-input-group" class="input-group" style="display: none;">
+                        <label id="otp-label">Verify OTP</label>
+                        <div class="otp-input-container">
+                            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+                            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+                            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+                            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+                            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+                            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="login-btn" class="login-btn">Send OTP</button>
+                    
+                    <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                        <button type="button" id="resend-otp-btn" class="back-link" style="display: none;">← Back to Phone</button>
+                        <button type="button" id="guest-btn" class="back-link" style="color: var(--text-muted);">Continue as Guest</button>
+                    </div>
+                </form>
+
+                <div class="login-footer">🇮🇳 Constitutional Guide v1.0</div>
+            </div>
+        </div>
+
+        <!-- Main App -->
+        <div id="main-app" class="app-container" style="display: none;">
+            <nav class="top-nav">
+                <div class="nav-logo" onclick="location.reload()" style="cursor:pointer">
+                    <i data-lucide="globe" class="chakra-icon" style="width: 28px; height: 28px;"></i>
+                    <span>Law</span>
+                </div>
+                <div class="nav-actions">
+                    <button class="nav-btn" id="nav-home"><i data-lucide="home"></i><span class="t-home">Home</span></button>
+                    <button class="nav-btn assistant-btn" id="nav-assistant"><i data-lucide="message-square"></i><span class="t-legalAI">Legal AI</span></button>
+                    <button class="nav-btn" id="nav-quiz"><i data-lucide="trophy"></i><span class="t-quizMode">Quiz</span></button>
+                    <div class="lang-selector">
+                        <select id="language-select">
+                            <option value="EN">English</option>
+                            <option value="HI">हिंदी</option>
+                        </select>
+                    </div>
+                    <button class="nav-btn" id="logout-btn"><i data-lucide="log-out"></i></button>
+                </div>
+            </nav>
+
+            <header class="hero">
+                <div class="hero-content">
+                    <h1 id="hero-title">Know Your Rights</h1>
+                    <p id="hero-subtitle">Simplified laws for every Indian citizen.</p>
+                    <div class="search-container">
+                        <i data-lucide="search" class="search-icon"></i>
+                        <input type="text" id="search-input" placeholder="Search for a law or section...">
+                    </div>
+                    <div class="category-tags" id="category-tags"></div>
+                </div>
+            </header>
+
+            <main class="content">
+                <div class="quick-nav-cards" style="margin-bottom: 3rem;">
+                    <button class="quick-nav-card" id="card-docs"><div class="icon-wrapper"><i data-lucide="file-text"></i></div><div><h3>Documents</h3><p>Legal IDs</p></div></button>
+                    <button class="quick-nav-card" id="card-lawyers"><div class="icon-wrapper"><i data-lucide="users"></i></div><div><h3>Lawyers</h3><p>Get Help</p></div></button>
+                    <button class="quick-nav-card" id="card-helpline"><div class="icon-wrapper"><i data-lucide="phone-call"></i></div><div><h3>Helplines</h3><p>Emergency</p></div></button>
+                </div>
+                <section class="article-grid" id="article-grid"></section>
+            </main>
+
+            <footer class="footer"><p>&copy; 2026 Law. Patriotic Legal Guide 🇮🇳</p></footer>
+        </div>
+
+        <!-- Modals -->
+        <div id="modal-overlay" class="modal-overlay" style="display: none;"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
